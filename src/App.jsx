@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Home from './pages/Home';
 import SettlementPage from './pages/SettlementPage';
+import { API_BASE_URL } from './config';
 
-const API = 'http://localhost:8080/api/expenses';
+const API = `${API_BASE_URL}/api/expenses`;
 
 function App() {
   const [expenses, setExpenses] = useState([]);

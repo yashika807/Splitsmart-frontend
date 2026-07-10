@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 function AIInput({ onExpensesparsed }) {
   const [text, setText] = useState('');
@@ -8,7 +9,7 @@ function AIInput({ onExpensesparsed }) {
     if (!text.trim()) return;
     setLoading(true);
 
-    const response = await fetch('http://localhost:8080/api/expenses/parse', {
+    const response = await fetch(`${API_BASE_URL}/api/expenses/parse`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text })

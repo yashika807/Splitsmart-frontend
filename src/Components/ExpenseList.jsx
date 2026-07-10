@@ -7,8 +7,8 @@ function ExpenseList({ expenses, onDelete }) {
   
     return (
       <div style={{ maxWidth: '500px', margin: '0 auto', padding: '0 20px' }}>
-        {expenses.map((expense, index) => (
-          <div key={index} style={{
+        {expenses.map((expense) => (
+          <div key={expense.id} style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
