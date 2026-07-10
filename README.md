@@ -7,8 +7,14 @@ then works out the minimum set of payments needed to settle up.
 React + Vite frontend, backed by a Spring Boot API. Built as a learning
 project / portfolio piece.
 
-**Live app:** _(add your Netlify URL here once deployed)_
+**Live app:** [amazing-crumble-c433d9.netlify.app](https://amazing-crumble-c433d9.netlify.app)
 **Backend repo:** [splitsmart-backend](https://github.com/yashika807/splitsmart-backend)
+
+Both repos auto-deploy on every push to `main` — Netlify builds the frontend,
+Render builds and redeploys the backend from its `Dockerfile`. No manual
+deploy step. The backend is on Render's free tier, which spins down after
+15 minutes idle — the first request after a while sleeping takes ~30-60s
+to wake back up.
 
 ## Screenshots
 
@@ -152,7 +158,7 @@ What's actually done vs. not — no aspirational checkmarks.
 - [ ] Itemized receipt splits feeding into the aggregate Settlement page
       (currently a separate, self-contained calculation — see
       [Receipt splitting, in detail](#receipt-splitting-in-detail))
-- [ ] Backend deployed to a public host — currently local-only
+- [x] Both repos deployed with CI/CD (Netlify + Render, auto-deploy on push)
 - [ ] User accounts / auth — it's a single shared list, no login
 - [ ] Automated tests — none on the frontend yet
 - [ ] Input validation (negative/zero amounts, empty names)
