@@ -1,40 +1,77 @@
+function simplifyDebts(balances) {
+  const creditors = balances
+    .filter(b => b.balance > 0.01)
+    .map(b => ({ ...b }))
+    .sort((a, b) => b.balance - a.balance);
+
+  const debtors = balances
+    .filter(b => b.balance < -0.01)
+    .map(b => ({ name: b.name, balance: -b.balance }))
+    .sort((a, b) => b.balance - a.balance);
+
+  const transactions = [];
+  let i = 0, j = 0;
+
+  while (i < debtors.length && j < creditors.length) {
+    const debtor = debtors[i];
+    const creditor = creditors[j];
+    const amount = Math.min(debtor.balance, creditor.balance);
+
+    transactions.push({ from: debtor.name, to: creditor.name, amount });
+
+    debtor.balance -= amount;
+    creditor.balance -= amount;
+
+    if (debtor.balance < 0.01) i++;
+    if (creditor.balance < 0.01) j++;
+  }
+
+  return transactions;
+}
 function Settlement({ expenses }) {
     if (expenses.length === 0) return null;
   
     const total = expenses.reduce((sum, e) => sum + e.amount, 0);
-    const perPerson = total / expenses.length;
+    const uniqueNames = [...new Set(expenses.map(e => e.name))];
+    const fairShare = total / uniqueNames.length;
+    const paidByPerson = {};
+    uniqueNames.forEach(name => { paidByPerson[name] = 0; });
+    expenses.forEach(e => { paidByPerson[e.name] += e.amount; });
   
-    const balances = expenses.map((e) => ({
-      name: e.name,
-      balance: e.amount - perPerson,
+    const balances = uniqueNames.map((name) => ({
+      name,
+      balance: paidByPerson[name] - fairShare,
     }));
+    const transactions = simplifyDebts(balances);
   
     return (
       <div style={{ maxWidth: '500px', margin: '24px auto', padding: '0 20px' }}>
         <h2 style={{ textAlign: 'center', color: '#333' }}>💸 Who Owes What</h2>
         <p style={{ textAlign: 'center', color: '#999', marginBottom: '16px' }}>
-          Fair share per person: ₹{perPerson.toFixed(2)}
+        Fair share per person: ₹{fairShare.toFixed(2)}
         </p>
   
-        {balances.map((b, i) => (
-          <div key={i} style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '14px 20px',
-            marginBottom: '10px',
-            borderRadius: '10px',
-            background: b.balance >= 0 ? '#e8f5e9' : '#fce4ec',
-            border: `1px solid ${b.balance >= 0 ? '#a5d6a7' : '#f48fb1'}`
-          }}>
-            <span style={{ fontWeight: '500' }}>{b.name}</span>
-            <span style={{ fontWeight: 'bold', color: b.balance >= 0 ? '#2e7d32' : '#c62828' }}>
-              {b.balance >= 0
-                ? `gets back ₹${b.balance.toFixed(2)}`
-                : `owes ₹${Math.abs(b.balance).toFixed(2)}`}
-            </span>
-          </div>
-        ))}
+        {transactions.length === 0 ? (
+  <p style={{ textAlign: 'center', color: '#999' }}>Everyone's settled up! 🎉</p>
+) : (
+  transactions.map((t, i) => (
+    <div key={i} style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '14px 20px',
+      marginBottom: '10px',
+      borderRadius: '10px',
+      background: '#fce4ec',
+      border: '1px solid #f48fb1'
+    }}>
+      <span style={{ fontWeight: '500' }}>{t.from} → {t.to}</span>
+      <span style={{ fontWeight: 'bold', color: '#c62828' }}>
+        ₹{t.amount.toFixed(2)}
+      </span>
+    </div>
+  ))
+)}
       </div>
     );
   }

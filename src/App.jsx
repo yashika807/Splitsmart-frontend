@@ -9,31 +9,33 @@ const API = 'http://localhost:8080/api/expenses';
 function App() {
   const [expenses, setExpenses] = useState([]);
 
-  useEffect(() => {
+  function fetchExpenses() {
     fetch(API)
       .then(res => res.json())
       .then(data => setExpenses(data));
+  }
+
+  useEffect(() => {
+    fetchExpenses();
   }, []);
 
   async function handleAdd(expense) {
-    const res = await fetch(API, {
+    await fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(expense)
     });
-    const saved = await res.json();
-    setExpenses([...expenses, saved]);
+    fetchExpenses();
   }
 
-  async function handleDelete(index) {
-    const expense = expenses[index];
-    await fetch(`${API}/${expense.id}`, { method: 'DELETE' });
-    setExpenses(expenses.filter((_, i) => i !== index));
+  async function handleDelete(id) {
+    await fetch(`${API}/${id}`, { method: 'DELETE' });
+    fetchExpenses();
   }
 
-  function handleReset() {
-    expenses.forEach(e => fetch(`${API}/${e.id}`, { method: 'DELETE' }));
-    setExpenses([]);
+  async function handleReset() {
+    await Promise.all(expenses.map(e => fetch(`${API}/${e.id}`, { method: 'DELETE' })));
+    fetchExpenses();
   }
 
   return (

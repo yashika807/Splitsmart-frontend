@@ -22,7 +22,7 @@ function ExpenseList({ expenses, onDelete }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <span style={{ fontWeight: 'bold', color: '#6c63ff' }}>₹{expense.amount}</span>
               <button
-                onClick={() => onDelete(index)}
+                onClick={() => onDelete(expense.id)}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem' }}
               >
                 🗑️

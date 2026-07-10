@@ -8,32 +8,13 @@ function AIInput({ onExpensesparsed }) {
     if (!text.trim()) return;
     setLoading(true);
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('http://localhost:8080/api/expenses/parse', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': import.meta.env.VITE_ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: `Extract expenses from this text and return ONLY a JSON array, no other text:
-"${text}"
-
-Format: [{"name": "person name", "amount": number}]
-Example: [{"name": "Rahul", "amount": 500}, {"name": "Mini", "amount": 300}]`
-        }]
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
     });
-
-    const data = await response.json();
-    const raw = data.content[0].text;
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const expenses = JSON.parse(clean);
+    
+    const expenses = await response.json();
     onExpensesparsed(expenses);
     setText('');
     setLoading(false);
