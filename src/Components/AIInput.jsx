@@ -4,21 +4,32 @@ import { API_BASE_URL } from '../config';
 function AIInput({ onExpensesparsed }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   async function handleParse() {
     if (!text.trim()) return;
     setLoading(true);
+    setError('');
 
-    const response = await fetch(`${API_BASE_URL}/api/expenses/parse`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
-    });
-    
-    const expenses = await response.json();
-    onExpensesparsed(expenses);
-    setText('');
-    setLoading(false);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/expenses/parse`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+
+      if (!response.ok) {
+        throw new Error('The AI parser had trouble with that. Try rephrasing?');
+      }
+
+      const expenses = await response.json();
+      await onExpensesparsed(expenses);
+      setText('');
+    } catch (err) {
+      setError(err.message || 'Something went wrong parsing that.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -71,6 +82,11 @@ function AIInput({ onExpensesparsed }) {
       >
         {loading ? '🤖 Parsing...' : '✨ Parse with AI'}
       </button>
+      {error && (
+        <p style={{ color: '#e53935', fontSize: '0.85rem', marginTop: '8px', marginBottom: 0 }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }

@@ -2,7 +2,14 @@ import ExpenseForm from '../Components/ExpenseForm';
 import ExpenseList from '../Components/ExpenseList';
 import Hero from '../Components/Hero';
 import AIInput from '../Components/AIInput';
+import FeatureCard from '../Components/FeatureCard';
 import { useNavigate } from 'react-router-dom';
+
+const FEATURES = [
+  { icon: '✨', title: 'AI Parsing', description: 'Describe expenses in plain English — Gemini turns them into structured entries automatically.' },
+  { icon: '💸', title: 'Fair Split', description: 'A greedy debt-simplification algorithm works out the fewest payments needed to settle up.' },
+  { icon: '🧳', title: 'Trip vs Family', description: 'Keep a weekend trip and your recurring family expenses separate with one tap.' },
+];
 
 function Home({ expenses, onAdd, onDelete }) {
   function scrollToAIInput() {
@@ -11,15 +18,29 @@ function Home({ expenses, onAdd, onDelete }) {
   const navigate = useNavigate();
 
   async function handleParsed(parsedExpenses) {
+    if (!Array.isArray(parsedExpenses)) {
+      throw new Error('AI parsing failed — try rephrasing your expense.');
+    }
     for (const expense of parsedExpenses) {
       await onAdd(expense);
     }
   }
 
-  return (   
+  return (
 
     <div>
       <Hero onTryItClick={scrollToAIInput} />
+      <div style={{
+        display: 'flex',
+        gap: '20px',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        padding: '0 20px 32px'
+      }}>
+        {FEATURES.map((feature) => (
+          <FeatureCard key={feature.title} {...feature} />
+        ))}
+      </div>
        <div id="ai-input-section" style={{ maxWidth: '600px', margin: '0 auto', padding: '0 20px' }}>
         <AIInput onExpensesparsed={handleParsed} />
       </div>

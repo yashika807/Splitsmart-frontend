@@ -14,7 +14,8 @@ function App() {
   function fetchExpenses() {
     fetch(API)
       .then(res => res.json())
-      .then(data => setExpenses(data));
+      .then(data => setExpenses(data))
+      .catch(err => console.error('Failed to load expenses:', err));
   }
 
   useEffect(() => {
