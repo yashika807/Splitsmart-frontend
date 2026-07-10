@@ -2,11 +2,13 @@ import ExpenseForm from '../Components/ExpenseForm';
 import ExpenseList from '../Components/ExpenseList';
 import Hero from '../Components/Hero';
 import AIInput from '../Components/AIInput';
+import ReceiptSplitter from '../Components/ReceiptSplitter';
 import FeatureCard from '../Components/FeatureCard';
 import { useNavigate } from 'react-router-dom';
 
 const FEATURES = [
   { icon: '✨', title: 'AI Parsing', description: 'Describe expenses in plain English — Gemini turns them into structured entries automatically.' },
+  { icon: '🧾', title: 'Receipt Splitting', description: 'Photograph a receipt — AI reads each item and splits it (with proportional tax/tip) exactly the way people actually shared it.' },
   { icon: '💸', title: 'Fair Split', description: 'A greedy debt-simplification algorithm works out the fewest payments needed to settle up.' },
   { icon: '🧳', title: 'Trip vs Family', description: 'Keep a weekend trip and your recurring family expenses separate with one tap.' },
 ];
@@ -43,6 +45,9 @@ function Home({ expenses, onAdd, onDelete }) {
       </div>
        <div id="ai-input-section" style={{ maxWidth: '600px', margin: '0 auto', padding: '0 20px' }}>
         <AIInput onExpensesparsed={handleParsed} />
+      </div>
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 20px' }}>
+        <ReceiptSplitter expenses={expenses} onAdd={onAdd} />
       </div>
       <ExpenseForm onAdd={onAdd} />
       <ExpenseList expenses={expenses} onDelete={onDelete} />
