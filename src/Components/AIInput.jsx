@@ -18,12 +18,13 @@ function AIInput({ onExpensesparsed }) {
         body: JSON.stringify({ text })
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('The AI parser had trouble with that. Try rephrasing?');
+        throw new Error(data.error || 'Something went wrong parsing that. Try again?');
       }
 
-      const expenses = await response.json();
-      await onExpensesparsed(expenses);
+      await onExpensesparsed(data);
       setText('');
     } catch (err) {
       setError(err.message || 'Something went wrong parsing that.');
