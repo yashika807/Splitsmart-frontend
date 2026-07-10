@@ -9,6 +9,7 @@ const API = `${API_BASE_URL}/api/expenses`;
 
 function App() {
   const [expenses, setExpenses] = useState([]);
+  const [activeContext, setActiveContext] = useState('Trip');
 
   function fetchExpenses() {
     fetch(API)
@@ -20,11 +21,15 @@ function App() {
     fetchExpenses();
   }, []);
 
+  const visibleExpenses = expenses.filter(
+    e => (e.context || 'Trip') === activeContext
+  );
+
   async function handleAdd(expense) {
     await fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(expense)
+      body: JSON.stringify({ ...expense, context: activeContext })
     });
     fetchExpenses();
   }
@@ -35,19 +40,19 @@ function App() {
   }
 
   async function handleReset() {
-    await Promise.all(expenses.map(e => fetch(`${API}/${e.id}`, { method: 'DELETE' })));
+    await Promise.all(visibleExpenses.map(e => fetch(`${API}/${e.id}`, { method: 'DELETE' })));
     fetchExpenses();
   }
 
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar activeContext={activeContext} onContextChange={setActiveContext} />
       <Routes>
         <Route path="/" element={
-          <Home expenses={expenses} onAdd={handleAdd} onDelete={handleDelete} />
+          <Home expenses={visibleExpenses} onAdd={handleAdd} onDelete={handleDelete} />
         } />
         <Route path="/settlement" element={
-          <SettlementPage expenses={expenses} onReset={handleReset} />
+          <SettlementPage expenses={visibleExpenses} onReset={handleReset} />
         } />
       </Routes>
     </BrowserRouter>
