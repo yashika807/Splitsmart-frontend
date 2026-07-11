@@ -37,27 +37,31 @@ function AIInput({ onExpensesparsed }) {
     <div style={{
       maxWidth: '600px',
       margin: '0 auto',
-      padding: '20px',
-      background: 'linear-gradient(135deg, #f0f4ff, #f5f6fa)',
-      borderRadius: '16px',
-      border: '2px solid #e0e7ff',
-      marginBottom: '24px'
+      padding: 'var(--space-5)',
+      background: 'var(--amber-soft)',
+      borderRadius: '8px',
+      border: '1px solid var(--amber)',
+      marginBottom: 'var(--space-5)'
     }}>
-      <p style={{ fontWeight: '600', color: '#6c63ff', marginBottom: '10px' }}>
+      <p style={{ fontFamily: 'var(--font-display)', fontWeight: '700', color: 'var(--ink)', marginBottom: 'var(--space-2)' }}>
         ✨ AI Expense Parser
       </p>
-      <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '12px' }}>
+      <p style={{ color: 'var(--ink-soft)', fontSize: '0.9rem', marginBottom: 'var(--space-3)' }}>
         Plain English mein likho — AI automatically parse karega!
       </p>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder='e.g. "Rahul ne hotel ke 5000 diye, mini ne cab pe 800 kharch kiye"'
+        disabled={loading}
         style={{
           width: '100%',
-          padding: '12px',
-          borderRadius: '10px',
-          border: '1px solid #e0e0e0',
+          padding: 'var(--space-3)',
+          borderRadius: '6px',
+          border: '1px solid var(--line-strong)',
+          background: 'var(--paper-raised)',
+          color: 'var(--ink)',
+          fontFamily: 'var(--font-body)',
           fontSize: '0.95rem',
           minHeight: '80px',
           resize: 'vertical',
@@ -65,26 +69,47 @@ function AIInput({ onExpensesparsed }) {
           boxSizing: 'border-box'
         }}
       />
-      <button
-        onClick={handleParse}
-        disabled={loading}
-        style={{
-          marginTop: '10px',
-          background: loading ? '#ccc' : 'linear-gradient(135deg, #6c63ff, #5a52d5)',
-          color: 'white',
-          padding: '12px 28px',
-          border: 'none',
-          borderRadius: '10px',
-          fontSize: '1rem',
-          fontWeight: '600',
-          cursor: loading ? 'not-allowed' : 'pointer',
-          width: '100%'
-        }}
-      >
-        {loading ? '🤖 Parsing...' : '✨ Parse with AI'}
-      </button>
+
+      {loading ? (
+        <div style={{
+          marginTop: 'var(--space-3)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--space-3)',
+          padding: 'var(--space-3) var(--space-4)',
+          background: 'var(--paper-raised)',
+          border: '1px solid var(--amber)',
+          borderRadius: '6px',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.88rem',
+          color: 'var(--ink)'
+        }}>
+          <span className="stamp-spin" aria-hidden="true" />
+          <span>Reading your message&hellip;</span>
+        </div>
+      ) : (
+        <button
+          onClick={handleParse}
+          style={{
+            marginTop: 'var(--space-3)',
+            background: 'var(--ink)',
+            color: 'var(--paper)',
+            padding: '12px 28px',
+            border: 'none',
+            borderRadius: '6px',
+            fontFamily: 'var(--font-body)',
+            fontSize: '1rem',
+            fontWeight: '700',
+            cursor: 'pointer',
+            width: '100%'
+          }}
+        >
+          ✨ Parse with AI
+        </button>
+      )}
+
       {error && (
-        <p style={{ color: '#e53935', fontSize: '0.85rem', marginTop: '8px', marginBottom: 0 }}>
+        <p style={{ color: 'var(--red)', fontSize: '0.85rem', marginTop: 'var(--space-2)', marginBottom: 0 }}>
           {error}
         </p>
       )}

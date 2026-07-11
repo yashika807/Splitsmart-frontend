@@ -28,6 +28,27 @@ function computeShares(items, people, tax, tip) {
   return { subtotal, shares };
 }
 
+const fieldStyle = {
+  padding: '9px 12px',
+  borderRadius: '5px',
+  border: '1px solid var(--line-strong)',
+  background: 'var(--paper)',
+  color: 'var(--ink)',
+  fontFamily: 'var(--font-body)',
+  fontSize: '0.95rem',
+  boxSizing: 'border-box'
+};
+
+const labelStyle = {
+  fontSize: '0.82rem',
+  fontWeight: '700',
+  color: 'var(--ink-soft)',
+  marginBottom: 'var(--space-2)',
+  textTransform: 'uppercase',
+  letterSpacing: '0.03em',
+  fontFamily: 'var(--font-mono)'
+};
+
 function ReceiptSplitter({ expenses, onAdd }) {
   const [step, setStep] = useState('idle'); // idle | loading | reviewing
   const [error, setError] = useState('');
@@ -150,16 +171,16 @@ function ReceiptSplitter({ expenses, onAdd }) {
     <div style={{
       maxWidth: '600px',
       margin: '0 auto',
-      padding: '20px',
-      background: 'linear-gradient(135deg, #fff7ed, #fef3e2)',
-      borderRadius: '16px',
-      border: '2px solid #fde4c8',
-      marginBottom: '24px'
+      padding: 'var(--space-5)',
+      background: 'var(--paper-raised)',
+      borderRadius: '8px',
+      border: '1px solid var(--amber)',
+      marginBottom: 'var(--space-5)'
     }}>
-      <p style={{ fontWeight: '600', color: '#c2740a', marginBottom: '10px' }}>
+      <p style={{ fontFamily: 'var(--font-display)', fontWeight: '700', color: 'var(--amber)', marginBottom: 'var(--space-2)' }}>
         🧾 Split a Receipt
       </p>
-      <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '12px' }}>
+      <p style={{ color: 'var(--ink-soft)', fontSize: '0.9rem', marginBottom: 'var(--space-3)' }}>
         Photograph a receipt — AI reads each item, you assign who had what,
         and it works out everyone's share including tax and tip.
       </p>
@@ -168,12 +189,13 @@ function ReceiptSplitter({ expenses, onAdd }) {
         <label style={{
           display: 'block',
           textAlign: 'center',
-          padding: '14px 28px',
-          background: 'linear-gradient(135deg, #f5a623, #c2740a)',
-          color: 'white',
-          borderRadius: '10px',
+          padding: '13px 28px',
+          background: 'var(--amber)',
+          color: 'var(--ink)',
+          borderRadius: '6px',
+          fontFamily: 'var(--font-body)',
           fontSize: '1rem',
-          fontWeight: '600',
+          fontWeight: '700',
           cursor: 'pointer'
         }}>
           📷 Upload / Take Photo
@@ -188,39 +210,66 @@ function ReceiptSplitter({ expenses, onAdd }) {
       )}
 
       {step === 'loading' && (
-        <div style={{ textAlign: 'center', padding: '20px', color: '#c2740a', fontWeight: '600' }}>
-          🤖 Reading your receipt...
+        <div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-3)',
+            padding: 'var(--space-3) var(--space-4)',
+            background: 'var(--amber-soft)',
+            border: '1px solid var(--amber)',
+            borderRadius: '6px',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.88rem',
+            color: 'var(--ink)',
+            marginBottom: 'var(--space-4)'
+          }}>
+            <span className="stamp-spin" aria-hidden="true" />
+            <span>Reading your receipt&hellip;</span>
+          </div>
+          {[0, 1, 2].map((i) => (
+            <div key={i} style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: 'var(--space-3) 0',
+              borderBottom: '1px dashed var(--line)'
+            }}>
+              <span className="skel" style={{ width: `${90 - i * 15}px`, height: '14px' }} />
+              <span className="skel" style={{ width: '50px', height: '14px' }} />
+            </div>
+          ))}
         </div>
       )}
 
       {error && (
-        <p style={{ color: '#e53935', fontSize: '0.85rem', marginTop: '8px' }}>{error}</p>
+        <p style={{ color: 'var(--red)', fontSize: '0.85rem', marginTop: 'var(--space-2)' }}>{error}</p>
       )}
 
       {step === 'reviewing' && (
         <div>
           {/* Line items */}
-          <div style={{ marginTop: '8px', marginBottom: '16px' }}>
+          <div style={{ marginTop: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
             {items.map((item) => (
               <div key={item.id} style={{
-                background: 'white',
-                borderRadius: '10px',
-                border: '1px solid #f0e0c8',
-                padding: '12px',
-                marginBottom: '10px'
+                background: 'var(--paper)',
+                borderRadius: '6px',
+                border: '1px solid var(--line)',
+                padding: 'var(--space-3)',
+                marginBottom: 'var(--space-3)'
               }}>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-2)', flexWrap: 'wrap' }}>
                   <input
                     value={item.itemName}
                     onChange={(e) => updateItem(item.id, 'itemName', e.target.value)}
-                    style={{ flex: '2 1 140px', padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
+                    style={{ ...fieldStyle, flex: '2 1 140px' }}
                   />
                   <input
                     type="number"
                     value={item.price}
                     onChange={(e) => updateItem(item.id, 'price', Number(e.target.value))}
                     placeholder="Price"
-                    style={{ flex: '1 1 70px', padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
+                    style={{ ...fieldStyle, flex: '1 1 70px', fontFamily: 'var(--font-mono)' }}
                   />
                   <input
                     type="number"
@@ -228,13 +277,13 @@ function ReceiptSplitter({ expenses, onAdd }) {
                     onChange={(e) => updateItem(item.id, 'quantity', Number(e.target.value))}
                     placeholder="Qty"
                     min="1"
-                    style={{ flex: '1 1 60px', padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
+                    style={{ ...fieldStyle, flex: '1 1 60px', fontFamily: 'var(--font-mono)' }}
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
                   {people.length === 0 && (
-                    <span style={{ fontSize: '0.8rem', color: '#999' }}>Add people below to assign this item</span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--ink-soft)' }}>Add people below to assign this item</span>
                   )}
                   {people.map((person) => (
                     <button
@@ -243,9 +292,11 @@ function ReceiptSplitter({ expenses, onAdd }) {
                       style={{
                         padding: '5px 12px',
                         borderRadius: '999px',
-                        border: item.assignedTo.includes(person) ? '1px solid #c2740a' : '1px solid #ddd',
-                        background: item.assignedTo.includes(person) ? '#c2740a' : 'white',
-                        color: item.assignedTo.includes(person) ? 'white' : '#666',
+                        border: item.assignedTo.includes(person) ? '1px solid var(--amber)' : '1px solid var(--line-strong)',
+                        background: item.assignedTo.includes(person) ? 'var(--amber)' : 'var(--paper)',
+                        color: item.assignedTo.includes(person) ? 'var(--ink)' : 'var(--ink-soft)',
+                        fontFamily: 'var(--font-body)',
+                        fontWeight: item.assignedTo.includes(person) ? '700' : '400',
                         fontSize: '0.8rem',
                         cursor: 'pointer'
                       }}
@@ -255,7 +306,7 @@ function ReceiptSplitter({ expenses, onAdd }) {
                   ))}
                 </div>
                 {item.assignedTo.length === 0 && (
-                  <p style={{ fontSize: '0.75rem', color: '#e53935', margin: '6px 0 0' }}>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--red)', margin: 'var(--space-2) 0 0' }}>
                     Not assigned to anyone yet
                   </p>
                 )}
@@ -264,25 +315,24 @@ function ReceiptSplitter({ expenses, onAdd }) {
           </div>
 
           {/* People roster */}
-          <div style={{ marginBottom: '16px' }}>
-            <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#666', marginBottom: '6px' }}>
-              Who's splitting this?
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
+          <div style={{ marginBottom: 'var(--space-4)' }}>
+            <p style={labelStyle}>Who's splitting this?</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
               {people.map((person) => (
                 <span key={person} style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '6px',
+                  gap: 'var(--space-2)',
                   padding: '5px 10px',
                   borderRadius: '999px',
-                  background: '#fef0da',
+                  background: 'var(--green-soft)',
+                  color: 'var(--ink)',
                   fontSize: '0.85rem'
                 }}>
                   {person}
                   <button
                     onClick={() => removePerson(person)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999', padding: 0, fontSize: '0.9rem' }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-soft)', padding: 0, fontSize: '0.9rem' }}
                     aria-label={`Remove ${person}`}
                   >
                     ×
@@ -290,20 +340,22 @@ function ReceiptSplitter({ expenses, onAdd }) {
                 </span>
               ))}
             </div>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
               <input
                 value={newPersonName}
                 onChange={(e) => setNewPersonName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && addPerson()}
                 placeholder="Add a person"
-                style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
+                style={{ ...fieldStyle, flex: 1 }}
               />
               <button onClick={addPerson} style={{
-                padding: '8px 16px',
-                borderRadius: '6px',
+                padding: '9px 18px',
+                borderRadius: '5px',
                 border: 'none',
-                background: '#c2740a',
-                color: 'white',
+                background: 'var(--ink)',
+                color: 'var(--paper)',
+                fontFamily: 'var(--font-body)',
+                fontWeight: '700',
                 cursor: 'pointer'
               }}>
                 + Add
@@ -312,14 +364,12 @@ function ReceiptSplitter({ expenses, onAdd }) {
           </div>
 
           {/* Paid by */}
-          <div style={{ marginBottom: '16px' }}>
-            <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#666', marginBottom: '6px' }}>
-              Who paid the bill?
-            </p>
+          <div style={{ marginBottom: 'var(--space-4)' }}>
+            <p style={labelStyle}>Who paid the bill?</p>
             <select
               value={payer}
               onChange={(e) => setPayer(e.target.value)}
-              style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ddd', width: '100%' }}
+              style={{ ...fieldStyle, width: '100%' }}
             >
               <option value="">Select a person</option>
               {people.map((person) => (
@@ -329,40 +379,48 @@ function ReceiptSplitter({ expenses, onAdd }) {
           </div>
 
           {/* Tax / tip */}
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
             <div style={{ flex: 1 }}>
-              <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#666', marginBottom: '6px' }}>Tax</p>
+              <p style={labelStyle}>Tax</p>
               <input
                 type="number"
                 value={tax}
                 onChange={(e) => setTax(Number(e.target.value))}
-                style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ddd', width: '100%', boxSizing: 'border-box' }}
+                style={{ ...fieldStyle, width: '100%', fontFamily: 'var(--font-mono)' }}
               />
             </div>
             <div style={{ flex: 1 }}>
-              <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#666', marginBottom: '6px' }}>Tip</p>
+              <p style={labelStyle}>Tip</p>
               <input
                 type="number"
                 value={tip}
                 onChange={(e) => setTip(Number(e.target.value))}
-                style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ddd', width: '100%', boxSizing: 'border-box' }}
+                style={{ ...fieldStyle, width: '100%', fontFamily: 'var(--font-mono)' }}
               />
             </div>
           </div>
 
           {/* Summary */}
           <div style={{
-            background: 'white',
-            borderRadius: '10px',
-            border: '1px solid #f0e0c8',
-            padding: '14px',
-            marginBottom: '16px'
+            background: 'var(--paper)',
+            borderRadius: '6px',
+            border: '1px solid var(--line)',
+            padding: 'var(--space-4)',
+            marginBottom: 'var(--space-4)'
           }}>
-            <p style={{ fontWeight: '600', marginTop: 0, marginBottom: '10px' }}>
+            <p style={{
+              fontFamily: 'var(--font-mono)',
+              fontWeight: '700',
+              fontSize: '0.88rem',
+              marginTop: 0,
+              marginBottom: 'var(--space-3)',
+              paddingBottom: 'var(--space-3)',
+              borderBottom: '1px solid var(--line)'
+            }}>
               Subtotal ₹{subtotal.toFixed(2)} + Tax ₹{(Number(tax) || 0).toFixed(2)} + Tip ₹{(Number(tip) || 0).toFixed(2)} = ₹{grandTotal.toFixed(2)}
             </p>
             {people.length === 0 ? (
-              <p style={{ color: '#999', fontSize: '0.85rem', margin: 0 }}>Add people to see who owes what.</p>
+              <p style={{ color: 'var(--ink-soft)', fontSize: '0.85rem', margin: 0 }}>Add people to see who owes what.</p>
             ) : (
               people.map((person) => {
                 const share = shares[person] || { itemShare: 0, taxTipShare: 0, total: 0 };
@@ -375,7 +433,7 @@ function ReceiptSplitter({ expenses, onAdd }) {
                     fontSize: '0.9rem'
                   }}>
                     <span>{isPayer ? `${person} (paid the bill)` : `${person} owes ${payer || '—'}`}</span>
-                    <span style={{ fontWeight: 'bold', color: isPayer ? '#666' : '#c62828' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700', color: isPayer ? 'var(--ink-soft)' : 'var(--red)' }}>
                       ₹{share.total.toFixed(2)}
                     </span>
                   </div>
@@ -384,18 +442,19 @@ function ReceiptSplitter({ expenses, onAdd }) {
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
             <button
               onClick={handleSave}
               disabled={!canSave || saving}
               style={{
                 flex: 1,
                 padding: '12px',
-                borderRadius: '10px',
+                borderRadius: '6px',
                 border: 'none',
-                background: canSave && !saving ? 'linear-gradient(135deg, #f5a623, #c2740a)' : '#ccc',
-                color: 'white',
-                fontWeight: '600',
+                background: canSave && !saving ? 'var(--green)' : 'var(--line)',
+                color: canSave && !saving ? 'var(--paper)' : 'var(--ink-soft)',
+                fontFamily: 'var(--font-body)',
+                fontWeight: '700',
                 cursor: canSave && !saving ? 'pointer' : 'not-allowed'
               }}
             >
@@ -405,10 +464,11 @@ function ReceiptSplitter({ expenses, onAdd }) {
               onClick={reset}
               style={{
                 padding: '12px 20px',
-                borderRadius: '10px',
-                border: '1px solid #ddd',
-                background: 'white',
-                color: '#666',
+                borderRadius: '6px',
+                border: '1px solid var(--line-strong)',
+                background: 'var(--paper)',
+                color: 'var(--ink-soft)',
+                fontFamily: 'var(--font-body)',
                 cursor: 'pointer'
               }}
             >
@@ -416,12 +476,12 @@ function ReceiptSplitter({ expenses, onAdd }) {
             </button>
           </div>
           {!canSave && unassignedItems.length > 0 && (
-            <p style={{ fontSize: '0.8rem', color: '#e53935', marginTop: '8px', marginBottom: 0 }}>
+            <p style={{ fontSize: '0.8rem', color: 'var(--red)', marginTop: 'var(--space-2)', marginBottom: 0 }}>
               Assign every item to at least one person before saving.
             </p>
           )}
           {!canSave && unassignedItems.length === 0 && !payer && (
-            <p style={{ fontSize: '0.8rem', color: '#e53935', marginTop: '8px', marginBottom: 0 }}>
+            <p style={{ fontSize: '0.8rem', color: 'var(--red)', marginTop: 'var(--space-2)', marginBottom: 0 }}>
               Select who paid the bill before saving.
             </p>
           )}

@@ -8,19 +8,25 @@ function SettlementPage({ expenses, onReset }) {
     <div>
       <Settlement expenses={expenses} />
 
-      <div style={{ textAlign: 'center', padding: '10px 0 20px' }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: 'var(--space-3)',
+        flexWrap: 'wrap',
+        padding: 'var(--space-3) var(--space-4) var(--space-6)'
+      }}>
         <button
           onClick={() => navigate('/')}
           style={{
             background: 'none',
-            border: '2px solid #6c63ff',
-            color: '#6c63ff',
-            padding: '10px 28px',
-            borderRadius: '8px',
+            border: '1.5px solid var(--ink)',
+            color: 'var(--ink)',
+            padding: '10px 26px',
+            borderRadius: '6px',
+            fontFamily: 'var(--font-body)',
             fontSize: '1rem',
             cursor: 'pointer',
-            fontWeight: '500',
-            marginRight: '12px'
+            fontWeight: '600'
           }}
         >
           ← Back
@@ -29,13 +35,14 @@ function SettlementPage({ expenses, onReset }) {
           onClick={() => { onReset(); navigate('/'); }}
           style={{
             background: 'none',
-            border: '2px solid #e53935',
-            color: '#e53935',
-            padding: '10px 28px',
-            borderRadius: '8px',
+            border: '1.5px solid var(--red)',
+            color: 'var(--red)',
+            padding: '10px 26px',
+            borderRadius: '6px',
+            fontFamily: 'var(--font-body)',
             fontSize: '1rem',
             cursor: 'pointer',
-            fontWeight: '500'
+            fontWeight: '600'
           }}
         >
           🔄 Reset Trip

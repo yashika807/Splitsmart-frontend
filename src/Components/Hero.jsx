@@ -2,32 +2,33 @@ function Hero({ onTryItClick }) {
   return (
     <div style={{
       textAlign: 'center',
-      padding: '60px 20px 40px',
-      background: 'linear-gradient(180deg, #f0f4ff 0%, #f5f6fa 100%)'
+      padding: 'var(--space-8) var(--space-4) var(--space-6)',
+      borderBottom: '1px solid var(--line)'
     }}>
       <h1 style={{
-        fontSize: '2.8rem',
-        fontWeight: '800',
-        color: '#1a1a2e',
-        marginBottom: '12px',
-        lineHeight: '1.2'
+        fontFamily: 'var(--font-display)',
+        fontSize: 'clamp(2rem, 6vw, 2.8rem)',
+        fontWeight: '700',
+        color: 'var(--ink)',
+        marginBottom: 'var(--space-3)',
+        lineHeight: '1.15'
       }}>
         Split expenses,<br />
-        <span style={{ color: '#6c63ff' }}>not friendships.</span>
+        <span style={{ color: 'var(--green)' }}>not friendships.</span>
       </h1>
-      <p style={{ color: '#666', fontSize: '1.1rem', marginBottom: '28px' }}>
+      <p style={{ color: 'var(--ink-soft)', fontSize: '1.1rem', marginBottom: 'var(--space-6)' }}>
         Describe your trip in plain English. We'll handle the math.
       </p>
       <button onClick={onTryItClick} style={{
-        background: 'linear-gradient(135deg, #6c63ff, #5a52d5)',
-        color: 'white',
-        padding: '14px 36px',
+        background: 'var(--ink)',
+        color: 'var(--paper)',
+        padding: '13px 32px',
         border: 'none',
-        borderRadius: '50px',
+        borderRadius: '5px',
+        fontFamily: 'var(--font-body)',
         fontSize: '1rem',
-        fontWeight: '600',
-        cursor: 'pointer',
-        boxShadow: '0 4px 15px rgba(108, 99, 255, 0.4)'
+        fontWeight: '700',
+        cursor: 'pointer'
       }}>
         Try it free →
       </button>

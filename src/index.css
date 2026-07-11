@@ -1,11 +1,171 @@
+@font-face {
+  font-family: 'Arvo';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/arvo-400.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Arvo';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/arvo-700.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Karla';
+  font-weight: 400 800;
+  font-style: normal;
+  src: url('/fonts/karla-var.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Courier Prime';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/courierprime-400.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Courier Prime';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/courierprime-700.woff2') format('woff2');
+  font-display: swap;
+}
+
+:root {
+  /* palette — "The Ledger" */
+  --paper: #ECEFE5;
+  --paper-raised: #F5F7EF;
+  --ink: #1E2E2A;
+  --ink-soft: #4A5A52;
+  --green: #2D6A4F;
+  --green-soft: #E4EEE7;
+  --red: #A6402E;
+  --red-soft: #F4E4DF;
+  --amber: #B8791F;
+  --amber-soft: #F3E7D0;
+  --line: #C7D0BE;
+  --line-strong: #9FAC94;
+
+  /* spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* type roles */
+  --font-display: 'Arvo', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Karla', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Courier Prime', 'Courier New', monospace;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #141F1B;
+    --paper-raised: #1A2622;
+    --ink: #E9ECE1;
+    --ink-soft: #A9B5A5;
+    --green: #4F9670;
+    --green-soft: #1E332A;
+    --red: #D2705A;
+    --red-soft: #35211D;
+    --amber: #D9A344;
+    --amber-soft: #332A19;
+    --line: #2C3A33;
+    --line-strong: #3C4C43;
+    color-scheme: dark;
+  }
+}
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+}
+
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, a:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #f5f6fa;
-    color: #333;
-  }
+}
+
+.stamp-spin {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid var(--amber);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.skel {
+  background: linear-gradient(90deg, var(--line) 25%, var(--line-strong) 50%, var(--line) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 3px;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* torn-receipt bottom edge — reserved for actual receipt/expense-list cards */
+.receipt-card {
+  position: relative;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding-bottom: var(--space-6);
+}
+.receipt-card::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -9px;
+  height: 18px;
+  background:
+    linear-gradient(135deg, var(--paper) 9px, transparent 0) 0 0,
+    linear-gradient(-135deg, var(--paper) 9px, transparent 0) 0 0;
+  background-size: 18px 18px;
+  background-repeat: repeat-x;
+  filter: drop-shadow(0 1px 0 var(--line));
+}

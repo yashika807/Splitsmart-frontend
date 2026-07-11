@@ -11,55 +11,54 @@ function ExpenseForm({ onAdd }) {
     setAmount('');
   }
 
+  const inputStyle = {
+    padding: '11px 16px',
+    borderRadius: '6px',
+    border: '1px solid var(--line-strong)',
+    background: 'var(--paper-raised)',
+    color: 'var(--ink)',
+    fontFamily: 'var(--font-body)',
+    fontSize: '1rem',
+    outline: 'none',
+    boxSizing: 'border-box'
+  };
+
   return (
     <div style={{
       display: 'flex',
-      gap: '12px',
+      gap: 'var(--space-3)',
       justifyContent: 'center',
-      padding: '32px 20px 16px',
-      flexWrap: 'wrap'
+      padding: 'var(--space-6) var(--space-4) var(--space-4)',
+      flexWrap: 'wrap',
+      maxWidth: '600px',
+      margin: '0 auto'
     }}>
       <input
         placeholder="Who paid? (e.g. Rahul)"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        style={{
-          padding: '12px 18px',
-          borderRadius: '12px',
-          border: '2px solid #e2e8f0',
-          fontSize: '1rem',
-          outline: 'none',
-          width: '220px',
-          background: 'white'
-        }}
+        style={{ ...inputStyle, flex: '2 1 200px' }}
       />
       <input
         placeholder="Amount (e.g. 500)"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         type="number"
-        style={{
-          padding: '12px 18px',
-          borderRadius: '12px',
-          border: '2px solid #e2e8f0',
-          fontSize: '1rem',
-          outline: 'none',
-          width: '160px',
-          background: 'white'
-        }}
+        style={{ ...inputStyle, flex: '1 1 130px' }}
       />
       <button
         onClick={handleAdd}
         style={{
-          padding: '12px 28px',
-          background: 'linear-gradient(135deg, #6c63ff, #5a52d5)',
-          color: 'white',
+          padding: '11px 26px',
+          background: 'var(--ink)',
+          color: 'var(--paper)',
           border: 'none',
-          borderRadius: '12px',
+          borderRadius: '6px',
           cursor: 'pointer',
+          fontFamily: 'var(--font-body)',
           fontSize: '1rem',
-          fontWeight: '600',
-          boxShadow: '0 4px 12px rgba(108,99,255,0.3)'
+          fontWeight: '700',
+          flex: '0 1 auto'
         }}
       >
         + Add

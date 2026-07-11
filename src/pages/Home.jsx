@@ -34,38 +34,38 @@ function Home({ expenses, onAdd, onDelete }) {
       <Hero onTryItClick={scrollToAIInput} />
       <div style={{
         display: 'flex',
-        gap: '20px',
+        gap: 'var(--space-5)',
         justifyContent: 'center',
         flexWrap: 'wrap',
-        padding: '0 20px 32px'
+        padding: 'var(--space-6) var(--space-4)'
       }}>
         {FEATURES.map((feature) => (
           <FeatureCard key={feature.title} {...feature} />
         ))}
       </div>
-       <div id="ai-input-section" style={{ maxWidth: '600px', margin: '0 auto', padding: '0 20px' }}>
+       <div id="ai-input-section" style={{ maxWidth: '600px', margin: '0 auto', padding: '0 var(--space-4)' }}>
         <AIInput onExpensesparsed={handleParsed} />
       </div>
-      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 20px' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 var(--space-4)' }}>
         <ReceiptSplitter expenses={expenses} onAdd={onAdd} />
       </div>
       <ExpenseForm onAdd={onAdd} />
       <ExpenseList expenses={expenses} onDelete={onDelete} />
 
       {expenses.length > 1 && (
-        <div style={{ textAlign: 'center', padding: '20px 0' }}>
+        <div style={{ textAlign: 'center', padding: 'var(--space-5) var(--space-4)' }}>
           <button
             onClick={() => navigate('/settlement')}
             style={{
-              background: 'linear-gradient(135deg, #6c63ff, #5a52d5)',
-              color: 'white',
-              padding: '14px 36px',
+              background: 'var(--green)',
+              color: 'var(--paper)',
+              padding: '13px 32px',
               border: 'none',
-              borderRadius: '50px',
+              borderRadius: '6px',
+              fontFamily: 'var(--font-body)',
               fontSize: '1rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              boxShadow: '0 4px 15px rgba(108,99,255,0.4)'
+              fontWeight: '700',
+              cursor: 'pointer'
             }}
           >
             See Who Owes What →
